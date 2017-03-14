@@ -1,0 +1,61 @@
+import java.io.*;
+import java.sql.SQLException;
+import java.util.*;
+
+
+
+public class main{
+
+		
+
+		public static void main(String [] args) throws ClassNotFoundException, SQLException, IOException {
+
+			boolean flag;	
+			int choice;
+	  		Scanner scan=new Scanner(System.in);
+	  		
+	  		DataStorage obj=new DataStorage();
+	  		
+				do{
+						System.out.println("Enter 1 to Register\n");
+						System.out.println("Enter 2 to get details\n");
+						System.out.println("Enter 3 to withdraw\n");
+						System.out.println("Enter 4 to deposit\n");
+						System.out.println("Enter 5 to to get Data Offline\n");
+						System.out.println("Enter 6 to exit");
+
+						System.out.println("Enter appropriate option to proceed: \t");
+						obj.connectDatabse();
+						choice=scan.nextInt();
+						scan.nextLine();
+						
+						switch(choice){
+
+								case 1:		obj.register();
+											System.out.println();		
+											break;
+
+								case 2:		obj.getDetails();
+											System.out.println();
+											break;
+
+								case 3:		obj.withdraw();
+											System.out.println();
+											break;
+
+								case 4: 	obj.deposit();
+											System.out.println();			
+											break;
+
+								case 5:		obj.OfflineData();
+											break;
+								
+								default: System.out.println("Invalid choice");
+							}
+
+
+						}while(choice!=6);
+					scan.close();
+					}
+}
+

@@ -1,0 +1,171 @@
+import java.awt.List;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.*;
+
+public class DataStorage extends Commit  {
+	Bank obj;
+	String name_Of_Customer;
+	int account_Number,bal;
+	String type_Of_Account,filename;
+	int balance,choice,act,amt;
+	boolean flag;
+	static final String BankName="AXIS BANK KORAMANGALA 1st BLOCK";
+	static final String IFSC_code="UTIB0000194";
+	static final String password="tarams";
+	BufferedWriter out = null;
+	
+	HashMap<Integer,Bank> b1=new HashMap<Integer,Bank>();
+	public ArrayList<String> data = new ArrayList<String>();
+	
+
+	int query;
+	
+	ResultSet rs;
+	ResultSetMetaData rsmd;
+	
+	Scanner scan=new Scanner(System.in);
+	
+		public void register() throws SQLException{
+			
+				System.out.println("enter name: ");
+				
+					name_Of_Customer=scan.nextLine();
+				while(true){
+					System.out.println("enter account num: ");
+					account_Number=scan.nextInt();
+					if(account_Number < 1000000000)
+					System.out.println("please enter 10 digit account number...");
+					else
+					break;
+				}
+				scan.nextLine();
+		
+				while(true){
+					System.out.println("enter type of account: ");
+					type_Of_Account=scan.nextLine();
+					if(type_Of_Account.equalsIgnoreCase("savings") || type_Of_Account.equalsIgnoreCase("current"))
+					break;
+					else
+					System.out.println("account type can only be savings or current");
+				}
+				while(true){
+					System.out.println("enter initial balance: ");
+					balance=scan.nextInt();
+					if(balance < 500 )
+					System.out.println("500 is initial balance...");
+					else break;
+				}
+				scan.nextLine();
+				b1.put(account_Number,new Bank(BankName,IFSC_code,name_Of_Customer,account_Number,type_Of_Account,balance));
+				
+				
+				sql="insert into customerDetails values(\""+name_Of_Customer+"\","+account_Number+",\""+type_Of_Account+"\","+balance+");";
+				query=stmt.executeUpdate(sql);
+				System.out.println(sql);
+			}
+	
+		
+		public void getDetails(){
+			System.out.println("Enter account number:");
+			act=scan.nextInt();
+			obj=(Bank)b1.get(act);
+			obj.display();
+		}
+		
+		public void withdraw() throws SQLException{
+			System.out.println("enter account number:");
+			act=scan.nextInt();
+			obj=(Bank)b1.get(act);
+			System.out.println("enter amount you want to withdraw");
+			amt=scan.nextInt();
+			flag=obj.checkBalance(amt);
+			if(flag){
+				obj.withdraw(amt);
+				System.out.println("Withdrawal Succesful....");
+				updateDetailsIntoDatabase(act,amt,'N');
+			}
+			else
+			System.out.println("you dont have cash");
+		}
+		
+		public void deposit() throws SQLException{
+			System.out.println("enter account number:");
+			act=scan.nextInt();
+			obj=(Bank)b1.get(act);
+			System.out.println("enter amount you want to deposit");
+			amt=scan.nextInt();
+			obj.deposit(amt);
+			System.out.println("Deposited Succesful....");
+			updateDetailsIntoDatabase(act,amt,'Y');
+		}
+		
+		public void updateDetailsIntoDatabase(int act, int amt, char c) throws SQLException {
+			sql="select balance from customerDetails where account_Number="+act;
+			rs=stmt.executeQuery(sql);
+			while(rs.next()){
+				bal=rs.getInt(1);
+			}
+			if(bal>amt){
+				
+				if(c=='Y')
+					bal+=amt;
+				else
+					bal-=amt;}
+			else
+				System.out.println("you dont have sufficient cash...");
+			sql="update customerDetails set balance="+bal+" where account_Number="+act;
+			query=stmt.executeUpdate(sql);
+		}
+
+
+		
+		public void OfflineData() throws SQLException, IOException {
+			int from,upto;
+			System.out.println("from: ");
+			from=scan.nextInt();
+			System.out.println("upto: ");
+			upto=scan.nextInt();
+			sql="select * from customerDetails where account_Number between "+from+" and "+upto;
+			rs=stmt.executeQuery(sql);
+			
+			
+			while (rs.next()) {
+                String name = rs.getString("name_Of_Customer");
+                int account = rs.getInt("account_Number");
+                String type = rs.getString("type_Of_Account");
+                int balanceOf = rs.getInt("balance");
+                data.add("Name Of Customer: "+name + "\nA/C no: " + account + "\nType of A/c: " + type + "\nBalance: " + balanceOf);
+                
+			}
+			System.out.println("Enter file name: ");
+            filename=scan.next();
+            String path="/home/monish/WEEK-2[MONISH]/BANK-JDBC[MONISH]/"+filename;
+			textFile(data,path);
+            
+		}
+			
+		public void textFile(ArrayList daa, String path) throws IOException{
+			
+			File myfile = new File(path);
+			myfile.createNewFile(); 
+			try (BufferedWriter out = new BufferedWriter(
+			        new FileWriter(path))) {
+			    for(String s:data)
+			    	out.write(s);
+			} catch (IOException e) {
+			    e.printStackTrace();
+			}
+			
+			
+			
+		}
+		
+		
+}
+

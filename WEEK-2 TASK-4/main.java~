@@ -1,0 +1,50 @@
+import java.io.*;
+import java.util.*;
+public class main{
+
+public static void main(String [] args){
+	String name_Of_Customer;
+	int account_Number;
+	String type_Of_Account;
+	int balance,choice;
+
+	  Scanner scan=new Scanner(System.in);
+
+	List<Bank> b1=new ArrayList<Bank>();
+	
+do{
+	System.out.println("Enter appropriate option to proceed: \t");
+	System.out.println("Enter 1 to Register\n");
+	System.out.println("Enter 2 to get details\n");
+	System.out.println("Enter 3 to withdraw\n");
+	System.out.println("Enter 4 to deposit\n");
+
+	System.out.println("Enter appropriate option to proceed: \t");
+	choice=scan.nextInt();
+
+	switch(choice){
+	
+		case 1: 
+				System.out.println("enter name: ");
+		 		name_Of_Customer=scan.nextLine();
+			while(true){				
+				System.out.println("enter account num: ");
+				account_Number=scan.nextInt();
+				if(account_Number < 1000000000)
+					System.out.println("please enter 10 digit account number...");
+				else
+					break;				
+				}
+				System.out.println("enter type of account: ");
+				type_Of_Account=scan.nextLine();
+				System.out.println("enter initial balance: ");
+				balance=scan.nextInt();
+			
+			break;
+		
+		case 2:  
+}
+}
+
+}
+}

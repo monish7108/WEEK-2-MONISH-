@@ -1,0 +1,16 @@
+Name Of Customer: monish
+A/C no: 1111111111
+Type of A/c: savings
+Balance: 23000Name Of Customer: samartha
+A/C no: 1212121212
+Type of A/c: current
+Balance: 34000Name Of Customer: gagan
+A/C no: 1313131313
+Type of A/c: savings
+Balance: 2000Name Of Customer: akhilesh
+A/C no: 1414141414
+Type of A/c: current
+Balance: 45000Name Of Customer: manohar
+A/C no: 1515151515
+Type of A/c: savings
+Balance: 27890
